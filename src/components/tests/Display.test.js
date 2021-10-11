@@ -1,11 +1,48 @@
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 
+import Display from '../Display';
+import userEvent from '@testing-library/user-event';
 
+const testShow = {
+    name:'',
+    summary:'',
+    seasons:[{
+        id:'0',
+        name:'season1',
+        episodes:[]
+    }],
+    
+}
 
+test('renders without errors', ()=> {
+    render(<Display/>)
+})
 
+test('show component will display', ()=> {
+    render(<Display/>)
+    const beenza = screen.getByRole('button');
+    userEvent.click(beenza);
+    const beenza2 = screen.queryByTestId('show-container');
+    waitFor(() => expect(beenza2).toBeInTheDocument());
+})
 
+test('options rendered', ()=> {
+    render(<Display show={testShow}/>)
+    const beenza = screen.getByRole('button');
+    userEvent.click(beenza);
+    const beenza2 = screen.queryAllByTestId('season-option')
+    waitFor(() => expect(beenza2).toHaveLength(1));
+})
 
-
-
+test('Fetch Button Call', ()=> {
+    
+    const beenza = jest.fn();
+    render(<Display show={testShow} handleClick={beenza}/>)
+    const superduperbeenzaballermachineagario = screen.getByRole('button');
+    userEvent.click(superduperbeenzaballermachineagario);
+    waitFor(() => expect(beenza).toBeCalled());
+})
 
 
 
